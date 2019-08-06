@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzFnAuthTest", "AzFnAuthTest\AzFnAuthTest.csproj", "{65BF721A-2CCE-4365-B92B-AD9E34B65D9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzFunctions.Tooling", "AzFunctions.Tooling\AzFunctions.Tooling.csproj", "{16A4C2EA-BA87-413C-AE34-0C08D7C19B79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65BF721A-2CCE-4365-B92B-AD9E34B65D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BF721A-2CCE-4365-B92B-AD9E34B65D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BF721A-2CCE-4365-B92B-AD9E34B65D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BF721A-2CCE-4365-B92B-AD9E34B65D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16A4C2EA-BA87-413C-AE34-0C08D7C19B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A4C2EA-BA87-413C-AE34-0C08D7C19B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A4C2EA-BA87-413C-AE34-0C08D7C19B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16A4C2EA-BA87-413C-AE34-0C08D7C19B79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29FAA7F9-885E-41E2-9FC6-347E38AED68A}
+	EndGlobalSection
+EndGlobal
