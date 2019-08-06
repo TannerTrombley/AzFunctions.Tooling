@@ -1,5 +1,6 @@
 ﻿using AzFunctions.Tooling.Auth;
 using AzFunctions.Tooling.Context;
+using AzFunctions.Tooling.DependencyInjection;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,10 +14,7 @@ namespace AzFnAuthTest
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ITokenValidator, TokenValidator>();
-            builder.Services.AddLogging();
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ICommandContext, CommandContext>();
+            builder.Services.UseAllTooling();
         }
     }
 }
