@@ -1,11 +1,6 @@
 ﻿using AzFunctions.Tooling.Auth;
-using AzFunctions.Tooling.Context;
 using AzFunctions.Tooling.DependencyInjection;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 [assembly: FunctionsStartup(typeof(AzFnAuthTest.Startup))]
 namespace AzFnAuthTest
@@ -14,7 +9,15 @@ namespace AzFnAuthTest
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.UseAllTooling();
+            var authenticationSettings = new ValidationSettings()
+            {
+                TenantDomain = "woodsplit.onmicrosoft.com",
+                TenantId = "9f08c85b-4115-499d-b09d-4fe05f69c9cb",
+                ValidAudiences = new string[] { "1fec7da5-70a7-4740-b920-67354eb810ef" },
+                StsHost = "https://woodsplit.b2clogin.com",
+                Policy = "B2C_1_SiUpIn"
+            };
+            builder.Services.UseAllTooling(authenticationSettings);
         }
     }
 }

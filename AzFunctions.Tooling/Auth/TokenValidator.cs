@@ -13,25 +13,20 @@ namespace AzFunctions.Tooling.Auth
     public class TokenValidator : ITokenValidator
     {
         private readonly ILogger<TokenValidator> _logger;
-        private readonly IConfiguration _config;
+        private readonly ValidationSettings _authSettings;
         
         private readonly TokenValidationParameters _tokenValidationParameters;
 
-        private const string STS_HOST = "https://woodsplit.b2clogin.com";
-        private const string VALID_AUDIENCE = "1fec7da5-70a7-4740-b920-67354eb810ef";
         private const string AUTH_HEADER_NAME = "Authorization";
         private const string BEARER_PREFIX = "Bearer ";
-        private const string TENANT_SCOPE = "woodsplit.onmicrosoft.com";
-        private const string POLICY = "B2C_1_SiUpIn";
-        private const string TENANT_ID = "9f08c85b-4115-499d-b09d-4fe05f69c9cb";
 
-        public TokenValidator(IConfiguration config, ILogger<TokenValidator> logger)
+        public TokenValidator(ILogger<TokenValidator> logger, ValidationSettings settings)
         {
             _logger = logger;
-            _config = config;
+            _authSettings = settings;
             IConfigurationManager<OpenIdConnectConfiguration> configurationManager = 
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    $"{STS_HOST}/tfp/{TENANT_SCOPE}/{POLICY}/v2.0/.well-known/openid-configuration",
+                    $"{_authSettings.StsHost}/tfp/{_authSettings.TenantDomain}/{_authSettings.Policy}/v2.0/.well-known/openid-configuration",
                     new OpenIdConnectConfigurationRetriever());
             OpenIdConnectConfiguration openIdConfig = configurationManager.GetConfigurationAsync(CancellationToken.None).GetAwaiter().GetResult();
             _tokenValidationParameters = new TokenValidationParameters()
@@ -39,8 +34,8 @@ namespace AzFunctions.Tooling.Auth
                 ValidateAudience = true,
                 RequireSignedTokens = true,
                 ValidateIssuer = true,
-                ValidIssuer = $"{STS_HOST}/{TENANT_ID}/v2.0/",
-                ValidAudiences = new[] { VALID_AUDIENCE },
+                ValidIssuer = $"{_authSettings.StsHost}/{_authSettings.TenantId}/v2.0/",
+                ValidAudiences = _authSettings.ValidAudiences,
                 IssuerSigningKeys = openIdConfig.SigningKeys
             };
         }

@@ -9,9 +9,10 @@ namespace AzFunctions.Tooling.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection UseAllTooling(this IServiceCollection services)
+        public static IServiceCollection UseAllTooling(this IServiceCollection services, ValidationSettings settings)
         {
-            return services.AddSingleton<ITokenValidator, TokenValidator>().
+            return services.AddSingleton<ValidationSettings>(settings)
+                .AddSingleton<ITokenValidator, TokenValidator>().
                 AddHttpContextAccessor().
                 AddScoped<ICommandContext, CommandContext>();
         }
