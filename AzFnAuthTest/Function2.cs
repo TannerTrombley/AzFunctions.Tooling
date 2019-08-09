@@ -34,6 +34,12 @@ namespace AzFnAuthTest
         {
             var user = new User(context.ObjectId.ToString(), "abc");
             user.Name = "Tanner12";
+            user.C = new Complex()
+            {
+                Attribute = "hello",
+                Table = "there"
+            };
+
             return await _userRepository.UpsertDocumentAsync(user);
         }
     }

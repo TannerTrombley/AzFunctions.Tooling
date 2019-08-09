@@ -14,5 +14,8 @@ namespace AzFnAuthTest
         }
 
         public string Name { get; set; }
+
+        [EntityJsonPropertyConverter]
+        public Complex C { get; set; }
     }
 }
