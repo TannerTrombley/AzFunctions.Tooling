@@ -8,28 +8,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using AzFunctions.Tooling.Context;
+using AzFunctions.Tooling.Storage;
 
 namespace AzFnAuthTest
 {
     public class Function2
     {
         private readonly ICommandContext _commandContext;
+        private readonly IRepository<User> _userRepository;
 
-        public Function2(ICommandContext commandContext)
+        public Function2(ICommandContext commandContext, IRepository<User> userRepo)
         {
             _commandContext = commandContext;
+            _userRepository = userRepo;
         }
         [FunctionName("Function2")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            return await _commandContext.ExecuteActionAsync(async () => await DoAction());
+            return await _commandContext.ExecuteActionAsync(async () => await DoAction(_commandContext));
         }
 
-        private async Task<string> DoAction()
+        private async Task<User> DoAction(ICommandContext context)
         {
-            return await Task.FromResult("ABC123");
+            var user = new User(context.ObjectId.ToString(), "abc");
+            user.Name = "Tanner12";
+            return await _userRepository.UpsertDocumentAsync(user);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
+using AzFunctions.Tooling.Settings;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -13,20 +13,20 @@ namespace AzFunctions.Tooling.Auth
     public class TokenValidator : ITokenValidator
     {
         private readonly ILogger<TokenValidator> _logger;
-        private readonly ValidationSettings _authSettings;
+        private readonly ISettingsProvider _settingsProvider;
         
         private readonly TokenValidationParameters _tokenValidationParameters;
 
         private const string AUTH_HEADER_NAME = "Authorization";
         private const string BEARER_PREFIX = "Bearer ";
 
-        public TokenValidator(ILogger<TokenValidator> logger, ValidationSettings settings)
+        public TokenValidator(ILogger<TokenValidator> logger, ISettingsProvider settingsProvider)
         {
             _logger = logger;
-            _authSettings = settings;
+            _settingsProvider = settingsProvider;
             IConfigurationManager<OpenIdConnectConfiguration> configurationManager = 
                 new ConfigurationManager<OpenIdConnectConfiguration>(
-                    $"{_authSettings.StsHost}/tfp/{_authSettings.TenantDomain}/{_authSettings.Policy}/v2.0/.well-known/openid-configuration",
+                    $"{_settingsProvider.GetRequiredSetting("StsHost")}/tfp/{_settingsProvider.GetRequiredSetting("TenantDomain")}/{_settingsProvider.GetRequiredSetting("Policy")}/v2.0/.well-known/openid-configuration",
                     new OpenIdConnectConfigurationRetriever());
             OpenIdConnectConfiguration openIdConfig = configurationManager.GetConfigurationAsync(CancellationToken.None).GetAwaiter().GetResult();
             _tokenValidationParameters = new TokenValidationParameters()
@@ -34,8 +34,8 @@ namespace AzFunctions.Tooling.Auth
                 ValidateAudience = true,
                 RequireSignedTokens = true,
                 ValidateIssuer = true,
-                ValidIssuer = $"{_authSettings.StsHost}/{_authSettings.TenantId}/v2.0/",
-                ValidAudiences = _authSettings.ValidAudiences,
+                ValidIssuer = $"{_settingsProvider.GetRequiredSetting("StsHost")}/{_settingsProvider.GetRequiredSetting("TenantId")}/v2.0/",
+                ValidAudiences = new string[] { _settingsProvider.GetRequiredSetting("ValidAudience") },
                 IssuerSigningKeys = openIdConfig.SigningKeys
             };
         }
